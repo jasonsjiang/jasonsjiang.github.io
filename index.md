@@ -1,7 +1,7 @@
 # Jason Jiang
-###### First Year Student at UC Berkeley. 
+First Year Student at UC Berkeley. 
 
-Currently under construction. :collision:
+Currently under construction.
 
 ### Woah, more stuff about me.
 [Email](mailto:jasonjiang@berkeley.edu) 
