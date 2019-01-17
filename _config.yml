@@ -1,0 +1,35 @@
+# Permalinks
+permalink:           pretty
+
+# Setup
+title:               Jason Jiang
+tagline:
+url:                 http://jasonsjiang.github.io
+paginate:            1
+baseurl:             ""
+
+# Assets
+#
+# We specify the directory for Jekyll so we can use @imports.
+sass:
+  sass_dir:          _sass
+  style:            :compressed
+
+# About/contact
+author:
+  name:              Jason Jiang
+  url:
+  email:             jasonjiang@berkeley.edu
+
+# Custom vars
+version:             2.0.0
+github:
+  repo:              https://github.com/jasonsjiang/jasonsjiang.github.io
+
+# Gems
+gems:
+  - jekyll-paginate
+  - jekyll-gist
+
+# pages
+pages_list: {'Work and Projects':'/wp', 'Miscellaneous':'/misc', 'Links':'/links'}
