@@ -28,5 +28,3 @@ github:              jasonsjiang
 
 # pages
 pages_list: {'About':'/about', 'Work and Projects':'/wp', 'Miscellaneous':'/misc'}
-
-plugins: [jekyll-paginate]
