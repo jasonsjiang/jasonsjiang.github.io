@@ -12,3 +12,6 @@ title:
 ### Other fun stuff:
 __[An exploration of the Billboard Top 100 songs](https://github.com/jasonsjiang/billboard-top-100-analysis/blob/master/billboard-exploration.ipynb)__<br>
 This is a personal project in which I explored the Billboard Top 100 songs form 1965 to 2015. I implemented topic models and various visualizations and you can interact with the graphs! (Note: ipywidgets doesn't work with GitHub preview).
+
+__[Sankey Visualizer]({{site.url}}/sankey)__<br>
+Work in progress. Using D3.js, this tool creates a sankey diagram when given a CSV (`source`, `target`, `value` format) and is a part of my work with [Jennifer Stokes-Draut](https://west.berkeley.edu/jstokes.php) at the UC Berkeley Water Center.
