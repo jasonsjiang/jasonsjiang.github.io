@@ -23,8 +23,10 @@ author:
 
 # Custom vars
 version:             2.0.0
-github:              jasonsjiang
-  repo:              https://github.com/jasonsjiang/jasonsjiang.github.io
+github:              
+  repo:              
 
 # pages
 pages_list: {'About':'/about', 'Work and Projects':'/wp', 'Miscellaneous':'/misc'}
+
+plugins: [jekyll-paginate]
