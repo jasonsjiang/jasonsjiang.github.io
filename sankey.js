@@ -156,7 +156,6 @@ function updateLegend(newData) {
       ++x;
     }
 
-    //
     moveSinksRight(x);
     scaleNodeBreadths((width - nodeWidth) / (x - 1));
   }
