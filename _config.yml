@@ -27,6 +27,6 @@ github:
   repo:              
 
 # pages
-pages_list: {'About':'/about', 'Work and Projects':'/wp', 'Miscellaneous':'/misc'}
+pages_list: {'About':'/about', 'Work and Projects':'/wp', 'Links':'/links'}
 
 plugins: [jekyll-paginate]

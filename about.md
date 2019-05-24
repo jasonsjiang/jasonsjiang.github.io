@@ -3,7 +3,6 @@ layout: page
 title:
 ---
 
-I’m Jason, a second year student at UC Berkeley studying applied mathematics
-with an emphasis on probability theory.
+Hi! I’m Jason, a third year student at UC Berkeley studying applied mathematics. 
 
-If you want to contact me, you can email me at jasonjiang[at]berkeley.edu.
+While I'm not working on academics, I enjoy cooking and [baking bread]({{site.url}}/assets/bread.jpg), making subpar [playlists](https://open.spotify.com/user/1210283630?si=LEpp5zK4R3qf_hvxvXTSQg) (and of course, listening to them), and reading [cool books]({{site.url}}/books).

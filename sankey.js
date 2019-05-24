@@ -1,7 +1,7 @@
 d3.sankey = function() {
   var sankey = {},
-      nodeWidth = 24,
-      nodePadding = 8,
+      nodeWidth = 20,
+      nodePadding = 4,
       size = [1, 1],
       nodes = [],
       links = [];
@@ -49,7 +49,7 @@ d3.sankey = function() {
     sankey
       .nodes(data.nodes)
       .links(data.links)
-      .layout(64);
+      .layout(30);
 
     updateLinks(data.links);
     updateNodes(data.nodes);

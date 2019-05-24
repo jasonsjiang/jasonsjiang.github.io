@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <title>Sankey Visualizer</title>
-<head>
-  <link rel="stylesheet" href="style.css">
-</head>
 <style>
 
 .node rect {
   cursor: move;
-  fill-opacity: .9;
+  fill-opacity: .8;
   shape-rendering: crispEdges;
 }
 
@@ -88,21 +85,38 @@
   background-color: #94e5ff;
 }
 
+.svg-container {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
 </style>
 <body>
 
   <div id="form">
     <form id="fileform">
-    <input type="file" accept=".csv" onchange = "handleFiles(this.files)" id="file" />
-    <label for='file' class="btn" id="filename">
-        upload a csv
-    </label>
-    <div style = "float:right;">
-      <button type="reset" value="reset" class="rb" id="resetButton">reset</button>
-    </div>
+      <div style="float:left";>
+        <input type="file" accept=".csv" onchange = "handleFiles(this.files)" id="file" />
+        <label for='file' class="btn" id="filename">
+          upload a csv
+        </label>
+      </div>
+      <div style = "float:right;">
+        <button type="reset" value="reset" class="rb" id="resetButton">reset</button>
+      </div>
   </form>
   </div>
-<svg style="width:auto" width="auto"></svg>
+
+  <svg id="frame" class="svg-container"></svg>
+
 </body>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
@@ -140,14 +154,18 @@ var svg = d3.select("svg"),
       height = +svg.attr("height");
 
 // set the dimensions and margins of the graph
-var margin = {top: 10, right: 10, bottom: 10, left: 10},
+var margin = {top: 10, right: 20, bottom: 120, left: 10},
     width = window.innerWidth - margin.left - margin.right,
-    height = window.innerHeight - 120;
+    height = window.innerHeight - margin.bottom;
 
   var t = d3.transition()
           .duration(750)
           .ease(d3.easeLinear);
 
+window.addEventListener('resize',function() {
+  var w =  window.innerWidth + margin.left + 10;
+  d3.select("svg").attr("width", w)
+  });
 // format variables
 var formatNumber = d3.format(",.0f"),    // zero decimal places
     format = function(d) { return formatNumber(d) + " " + units; },
@@ -155,8 +173,8 @@ var formatNumber = d3.format(",.0f"),    // zero decimal places
 
 // Set the sankey diagram properties
 var sankey = d3.sankey()
-    .nodeWidth(36)
-    .nodePadding(50)
+    .nodeWidth(20)
+    .nodePadding(40)
     .size([width, height]);
 
 var path = sankey.link();
@@ -167,13 +185,20 @@ function nodeKey(d) {
   }
 
 function updateData(da) {
-    d3.select("svg").remove();
+    d3.select("svg#frame").remove();
+
+    var w = window.innerWidth - 10;
+    var h = window.innerHeight - 90;
+
     var svg = d3.select("body").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("id", "frame")
+        .attr("width",  w)
+        .attr("height", h)
+        .classed("svg-content", true)
       .append("g")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
+
     //set up graph in same style as original example but empty
     graph = {"nodes" : [], "links" : []};
 
@@ -205,7 +230,7 @@ function updateData(da) {
     sankey
         .nodes(graph.nodes)
         .links(graph.links)
-        .layout(35);
+        .layout(30);
 
     // add in the links
     var link = svg.append("g").selectAll(".link")
