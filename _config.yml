@@ -1,32 +1,23 @@
-# Permalinks
-permalink:           pretty
+# Site settings
+title: jason jiang
+description: > 
+  
 
-# Setup
-title:               Jason Jiang
-tagline:
-url:                 http://jasonsjiang.github.io
-paginate:            1
-baseurl:             ""
+author: jason jiang
+email: jasonsjiang@berkeley.edu
+github_username: jasonsjiang
 
-# Assets
-#
-# We specify the directory for Jekyll so we can use @imports.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://jasonsjiang.github.io/" # the base hostname & protocol for your site
+
+
+# Build settings
+include: [_pages]
+markdown: kramdown
+permalink: /:year/:month/:title.html
+
 sass:
-  sass_dir:          _sass
-  style:            :compressed
+    style: compressed
 
-# About/contact
-author:
-  name:              Jason Jiang
-  url:
-  email:             jasonjiang@berkeley.edu
+exclude: [vendor]
 
-# Custom vars
-version:             2.0.0
-github:              
-  repo:              
-
-# pages
-pages_list: {'About':'/about', 'Work and Projects':'/wp', 'Links':'/links'}
-
-plugins: [jekyll-paginate]

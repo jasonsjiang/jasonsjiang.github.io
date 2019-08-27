@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Sankey Visualizer</title>
+<style>
+
+.node rect {
+  cursor: move;
+  fill-opacity: .8;
+  shape-rendering: crispEdges;
+}
+
+.node text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  pointer-events: none;
+  text-shadow: 0 .5px 0 #fff;
+}
+
+.link {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .2;
+}
+
+.link:hover {
+  stroke-opacity: .5;
+}
+
+.file {
+  padding: 5px 15px;
+  background: #ccc;
+  border: 0 none;
+  cursor: pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  }
+
+[type="file"] {
+    height: 0;
+    overflow: hidden;
+    width: 0;
+  }
+
+[type="file"] + label {
+  background: #addde6;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+	font-family: 'Poppins', sans-serif;
+	font-size: inherit;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  outline: none;
+  padding: 1rem 50px;
+  position: relative;
+  transition: all 0.3s;
+  vertical-align: middle;
+}
+
+[type="file"] + label:hover {
+  background-color: #94e5ff;
+}
+
+ .rb {
+   background: #addde6;
+   border: none;
+   border-radius: 5px;
+   color: #fff;
+   cursor: pointer;
+   display: inline-block;
+ 	 font-family: 'Poppins', sans-serif;
+ 	 font-size: inherit;
+   font-weight: 600;
+   margin-bottom: 1rem;
+   outline: none;
+   padding: 1rem 50px;
+   position: relative;
+   transition: all 0.3s;
+   vertical-align: middle;
+}
+
+.rb:hover {
+  background-color: #94e5ff;
+}
+
+.svg-container {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+</style>
+<body>
+
+  <div id="form">
+    <form id="fileform">
+      <div style="float:left";>
+        <input type="file" accept=".csv" onchange = "handleFiles(this.files)" id="file" />
+        <label for='file' class="btn" id="filename">
+          upload a csv
+        </label>
+      </div>
+      <div style = "float:right;">
+        <button type="reset" value="reset" class="rb" id="resetButton">reset</button>
+      </div>
+  </form>
+  </div>
+
+  <svg id="frame" class="svg-container"></svg>
+
+</body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="http://evanplaice.github.io/jquery-csv/src/jquery.csv.min.js"></script>
+<script src="sankey.js"></script>
+<script>
+
+var resetButton = document.getElementById('resetButton');
+var fileInput = document.getElementById('file');
+var form = document.getElementById('fileform');
+
+resetButton.addEventListener('click', function () {
+    form.reset();
+    document.getElementById('filename').innerHTML = 'upload a csv';
+    d3.select("svg").remove();
+});
+
+  function handleFiles(files) {
+    //document.getElementById('form').form.reset();
+    var reader = new FileReader();
+    document.getElementById('filename').innerHTML = files[0].name;
+    reader.readAsText(files[0])
+    reader.onload = loadHandler;
+  }
+
+    function loadHandler(event) {
+      var csv = event.target.result;
+      updateData(csv);
+    }
+
+var units = "AF";
+
+var svg = d3.select("svg"),
+      width = +svg.attr("width"),
+      height = +svg.attr("height");
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 20, bottom: 120, left: 10},
+    width = window.innerWidth - margin.left - margin.right,
+    height = window.innerHeight - margin.bottom;
+
+  var t = d3.transition()
+          .duration(750)
+          .ease(d3.easeLinear);
+
+window.addEventListener('resize',function() {
+  var w =  window.innerWidth + margin.left + 10;
+  d3.select("svg").attr("width", w)
+  });
+// format variables
+var formatNumber = d3.format(",.0f"),    // zero decimal places
+    format = function(d) { return formatNumber(d) + " " + units; },
+    color = d3.scaleOrdinal(d3.schemeCategory20);
+
+// Set the sankey diagram properties
+var sankey = d3.sankey()
+    .nodeWidth(20)
+    .nodePadding(40)
+    .size([width, height]);
+
+var path = sankey.link();
+
+
+function nodeKey(d) {
+    return d.node;
+  }
+
+function updateData(da) {
+    d3.select("svg#frame").remove();
+
+    var w = window.innerWidth - 10;
+    var h = window.innerHeight - 90;
+
+    var svg = d3.select("body").append("svg")
+        .attr("id", "frame")
+        .attr("width",  w)
+        .attr("height", h)
+        .classed("svg-content", true)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+    //set up graph in same style as original example but empty
+    graph = {"nodes" : [], "links" : []};
+
+    d3.csvParse(da).forEach(function (d) {
+      graph.nodes.push({ "name": d.source });
+      graph.nodes.push({ "name": d.target });
+      graph.links.push({ "source": d.source,
+                         "target": d.target,
+                         "value": +d.value });
+     });
+
+    // return only the distinct / unique nodes
+    graph.nodes = d3.keys(d3.nest()
+      .key(function (d) { return d.name; })
+      .object(graph.nodes));
+
+    // loop through each link replacing the text with its index from node
+    graph.links.forEach(function (d, i) {
+      graph.links[i].source = graph.nodes.indexOf(graph.links[i].source);
+      graph.links[i].target = graph.nodes.indexOf(graph.links[i].target);
+    });
+
+    // now loop through each nodes to make nodes an array of objects
+    // rather than an array of strings
+    graph.nodes.forEach(function (d, i) {
+      graph.nodes[i] = { "name": d };
+    });
+
+    sankey
+        .nodes(graph.nodes)
+        .links(graph.links)
+        .layout(30);
+
+    // add in the links
+    var link = svg.append("g").selectAll(".link")
+        .data(graph.links)
+      .enter().append("path")
+        .attr("class", "link")
+        .attr("d", path)
+        .style("stroke-width", function(d) { return Math.max(2, d.dy); })
+        .sort(function(a, b) { return b.dy - a.dy; });
+
+    // add the link titles
+    link.append("title")
+          .text(function(d) {
+      		return d.source.name + " → " +
+                  d.target.name + "\n" + format(d.value); });
+
+    // add in the nodes
+    var node = svg.append("g").selectAll(".node")
+        .data(graph.nodes)
+      .enter().append("g")
+        .attr("class", "node")
+        .attr("transform", function(d) {
+  		  return "translate(" + d.x + "," + d.y + ")"; })
+        .call(d3.drag()
+          .subject(function(d) {
+            return d;
+          })
+          .on("start", function() {
+            this.parentNode.appendChild(this);
+          })
+          .on("drag", dragmove));
+
+    // add the rectangles for the nodes
+    node.append("rect")
+        .attr("height", function(d) { return d.dy; })
+        .attr("width", sankey.nodeWidth())
+        .style("fill", function(d) {
+  		  return d.color = color(d.name.replace(/ .*/, "")); })
+        .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
+      .append("title")
+        .text(function(d) { return d.name + "\n" + format(d.value); });
+
+    // add in the title for the nodes
+    node.append("text")
+        .attr("x",  -6)
+        .attr("y", function(d) { return d.dy / 2; })
+        .attr("dy", ".25em")
+        .attr("text-anchor", "end")
+        .attr("transform", null)
+        .text(function(d) { return d.name; })
+      .filter(function(d) { return d.x < width / 2; })
+        .attr("x", 3 + sankey.nodeWidth())
+        .attr("text-anchor", "start");
+
+  function dragmove(d) {
+    d3.select(this).attr("transform",
+        "translate(" + (
+             d.x = Math.max(0, Math.min(width - d.dx, d3.event.x))
+          ) + "," + (
+                   d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
+            ) + ")");
+    sankey.relayout();
+    link.attr("d", path);}
+
+  };
+
+</script>
+
+
+</html>

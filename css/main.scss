@@ -1,0 +1,49 @@
+---
+# Main scss file
+---
+@charset "utf-8";
+
+// Helpers
+@import
+    'helpers/mixins',
+    'helpers/variables';
+
+// Base
+@import
+    'base/reset';
+
+// Utilities
+@import
+    'utilities/layout',
+    'utilities/separator';
+
+// Components
+@import
+    'components/page',
+    'components/article',
+    'components/tag',
+    'components/archives';
+
+// Vendor
+@import
+    'vendor/highlight';
+
+@font-face {
+    font-family: "San Francisco";
+    src: url('./SF-Pro-Display-Regular.otf');
+}
+   
+.name {
+    color: #4D4D4D;
+    font-size: 25px;
+    padding-bottom: 1em;
+    letter-spacing: 1px;
+}
+.dog-image {
+  height: auto;
+  width: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
