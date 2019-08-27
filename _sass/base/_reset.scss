@@ -57,6 +57,7 @@ h5,
 h6 {
     font-weight: 400;
     color: $c-base__02;
+    list-style: none;
 }
 
 
@@ -95,6 +96,12 @@ svg {
 
 /* Links */
 
+a {
+  color: $highlight;
+  text-decoration: none;
+  transition: color 0s;
+}
+
 a:not(.name):not(.icon) {
     color: $highlight;
     background-color: transparent;
@@ -103,9 +110,8 @@ a:not(.name):not(.icon) {
     position: relative;
     display: inline-block;
     padding: 0px 1px;
-    transition: color ease 0.3s;
+    transition: color ease-in-out 0.3s;
     
-    /* Hover animation effect for all buttons */
     &::after {
       content: '';
       position: absolute;
@@ -133,7 +139,7 @@ a.no-hov {
 	}
 	
 	&:hover {
-		color: $c-accent__darkblue
+		color: $highlight
 	}
 }
 
@@ -154,7 +160,6 @@ a.nav:before {
 a.icon {
   color: #4D4D4D;
   padding: 10px;
-
   background-color: transparent;
   text-decoration: none;
 
@@ -191,7 +196,7 @@ a.name {
   position: relative;
   display: inline-block;
   padding: 0px 1px;
-  transition: color ease 0.3s;
+  transition: color ease-in-out 0.3s;
   
   /* Hover animation effect for all buttons */
   &::after {
