@@ -1,7 +1,7 @@
 ---
 layout: page
 title: archive
-permalink: /archive
+permalink: /archive/
 ---
 
 under construction :^)
