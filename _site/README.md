@@ -1,1 +1,0 @@
- [Credit](https://github.com/mkchoi212/) for the original theme.
